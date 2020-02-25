@@ -1,0 +1,40 @@
+﻿@model User
+
+<br>
+<h1 class="display-4">Welcome to the Dojo Activity Center</h1>
+<hr>
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <form action="/register" method="post">
+            <h1 class="text-center">Register</h1>
+            <br>
+            <div class="form-group">
+                <label>Name</label>
+                <span class="error1" asp-validation-for="Name"></span>
+                <input placeholder="Name" class="form-control" asp-for="Name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <span class="error1" asp-validation-for="Email"></span>
+                <input placeholder="Email" class="form-control" asp-for="Email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <span class="error1" asp-validation-for="Password"></span>
+                <input placeholder="Password" class="form-control" asp-for="Password">
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <span class="error1" asp-validation-for="ConfirmedPassword"></span>
+                <input placeholder="Confirm Password" class="form-control" asp-for="ConfirmedPassword">
+            </div>
+            <div class="text-center">
+                <input type="submit" value="Sign Up!" class="btn btn-primary"> 
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <partial name="_Login">
+    </div>
+</div>

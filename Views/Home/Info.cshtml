@@ -1,0 +1,93 @@
+@model Actividad
+
+<header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">Dojo Activity Center</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <a href="/logout" class="text-right text-dark nav-link">Logout</a>
+                    <a href="/Home" class="text-left text-dark nav-link">Home</a>
+                </div>
+            </div>
+        </nav>
+</header>
+
+<br>
+<div class="row">
+    <div class="col-md-10">
+        <h2 class="display-4">@Model.Title</h2>
+    </div>
+    <div class="col-md-2">
+        @{
+                    if(Model.UserId == ViewBag.CurrentUser.UserId)
+                    {
+                    <td class="text-center">
+                        <form action="/delete/@Model.ActividadId" method="post">
+                            <input type="submit" value="Delete" class="btn btn-danger btn-lg button5">
+                        </form>
+                    </td> 
+                    } else {
+                        bool IsAttending = false;
+                        foreach(var y in Model.Participants)
+                        {
+                            if(y.UserId == ViewBag.CurrentUser.UserId)
+                            {
+                                IsAttending = true;
+                            }
+                        }
+                        if(IsAttending == true)
+                        {
+                            <td>
+                                <form action="/leave/@Model.ActividadId" method="post" class="text-center">
+                                    <input type="submit" value="Leave" class="btn btn-warning btn-lg button5">
+                                </form>
+                            </td>
+                        } else{
+                            <td>
+                                <form action="/join/@Model.ActividadId" method="post" class="text-center">
+                                    <input type="submit" value="Join" class="btn btn-primary btn-lg button5">
+                                </form>
+                            </td>
+
+
+
+                        }
+                    }
+                }
+    </div>
+
+</div>
+<hr>
+<br>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">
+        <p class="info1">Event Cordinator:  </p>
+        <p class="info2">@Model.Creator.Name</p>
+        <br>
+        <br>
+
+        <p class="info1">Description: </p>
+        <p class="info2">@Model.Description</p>
+        <br>
+        <br>
+        
+        <p class="info1">Participants:</p>
+        <ul>
+            @{
+                if(Model.Participants != null)
+                {
+                    foreach(var y in Model.Participants)
+                    {
+                        <li class="info2">@y.User.Name</li>
+                    }
+                }
+                
+            }
+        </ul>
+    </div>
+</div>

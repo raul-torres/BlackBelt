@@ -1,0 +1,138 @@
+@model List<Actividad>
+<header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">Dojo Activity Center</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <a href="/logout" class="text-right text-dark nav-link">Logout</a>
+                    <a class="text-left text-dark nav-link">Welcome, @ViewBag.CurrentUser.Name !</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+<br>
+<table class="table1">
+    <tr>
+        <th class="text-center">Activity</th>
+        <th class="text-center">Date and Time</th>
+        <th class="text-center">Duration</th>
+        <th class="text-center">Event Cordinator</th>
+        <th class="text-center">No. of Participants</th>
+        <th class="text-center">Actions</th>
+    </tr>
+    @{    
+        @foreach(var x in Model)
+        {
+            if(x.Date <= DateTime.Today)
+            {
+                if(x.Tiempo.TimeOfDay > DateTime.Now.TimeOfDay)
+                {
+                    <tr>
+                        <td class="text-center"><a href="/actividadinfo/@x.ActividadId">@x.Title</a> </td>
+                        <td class="text-center">@x.Date.ToShortDateString() at @x.Tiempo.ToString("hh:mm tt")</td>
+                        <td class="text-center">@x.Duration @x.DurationSpan</td>
+                        <td class="text-center">@x.Creator.Name</td>
+                        <td class="text-center">@x.Participants.Count</td>
+                        @{
+                            if(x.UserId == ViewBag.CurrentUser.UserId)
+                            {
+                            <td class="text-center">
+                                <form action="/delete/@x.ActividadId" method="post">
+                                    <input type="submit" value="Delete" class="btn btn-outline-danger button4">
+                                </form>
+                            </td> 
+                            } else {
+                                bool IsAttending = false;
+                                foreach(var y in x.Participants)
+                                {
+                                    if(y.UserId == ViewBag.CurrentUser.UserId)
+                                    {
+                                        IsAttending = true;
+                                    }
+                                }
+                                if(IsAttending == true)
+                                {
+                                    <td>
+                                        <form action="/leave/@x.ActividadId" method="post" class="text-center">
+                                            <input type="submit" value="Leave" class="btn btn-outline-warning button4">
+                                        </form>
+                                    </td>
+                                } else{
+                                    <td>
+                                        <form action="/join/@x.ActividadId" method="post" class="text-center">
+                                            <input type="submit" value="Join" class="btn btn-outline-primary button4">
+                                        </form>
+                                    </td>
+
+
+
+                                }
+                            }
+                        }
+                        
+                    </tr>
+                }
+            }
+            else {
+                <tr>
+                <td class="text-center"><a href="/actividadinfo/@x.ActividadId">@x.Title</a> </td>
+                <td class="text-center">@x.Date.ToShortDateString() at @x.Tiempo.ToString("hh:mm tt")</td>
+                <td class="text-center">@x.Duration @x.DurationSpan</td>
+                <td class="text-center">@x.Creator.Name</td>
+                <td class="text-center">@x.Participants.Count</td>
+                @{
+                    if(x.UserId == ViewBag.CurrentUser.UserId)
+                    {
+                    <td class="text-center">
+                        <form action="/delete/@x.ActividadId" method="post">
+                            <input type="submit" value="Delete" class="btn btn-outline-danger button4">
+                        </form>
+                    </td> 
+                    } else {
+                        bool IsAttending = false;
+                        foreach(var y in x.Participants)
+                        {
+                            if(y.UserId == ViewBag.CurrentUser.UserId)
+                            {
+                                IsAttending = true;
+                            }
+                        }
+                        if(IsAttending == true)
+                        {
+                            <td>
+                                <form action="/leave/@x.ActividadId" method="post" class="text-center">
+                                    <input type="submit" value="Leave" class="btn btn-outline-warning button4">
+                                </form>
+                            </td>
+                        } else{
+                            <td>
+                                <form action="/join/@x.ActividadId" method="post" class="text-center">
+                                    <input type="submit" value="Join" class="btn btn-outline-primary button4">
+                                </form>
+                            </td>
+
+
+
+                        }
+                    }
+                }
+                
+            </tr>
+            }
+            
+        }
+    }
+</table>
+
+<br>
+<br>
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+        <a href="/newactivity" class="btn btn-primary">Add New Activity</a>
+    </div>
+</div>
